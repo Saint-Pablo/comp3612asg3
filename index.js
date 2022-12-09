@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 // if a request is made for artist, return the artists.json file 
 //TESTED: YES
 
-app.get('/artist', (req, res) => {
+app.get('/artists', (req, res) => {
     // return all artist names in the artists.json file
     res.send(artists);
     console.log("artists.json file returned");
@@ -33,7 +33,7 @@ app.get('/artist', (req, res) => {
 
 // Returns JSON for all artists from the specified country. This should be case insensitive 
 //TESTED: YES
-app.get('/artist/:country', (req, res) => {
+app.get('/artists/:country', (req, res) => {
     const country = req.params.country;
     const artistsByCountry = artists.filter(artist => artist.Nationality.toLowerCase() === country.toLowerCase());
     if (artistsByCountry.length === 0) 
@@ -50,14 +50,14 @@ app.get('/artist/:country', (req, res) => {
 
 // Returns JSON for all galleries 
 //TESTED: YES
-app.get('/gallery', (req, res) => {
+app.get('/galleries', (req, res) => {
     res.send(galleries);
     console.log("galleries.json file returned");
 });
 
 // Returns JSON for all galleries from the specified country. This should be case insensitive 
 // TESTED: YES
-app.get('/gallery/:country', (req, res) => {
+app.get('/galleries/:country', (req, res) => {
     const country = req.params.country;
     const galleriesByCountry = galleries.filter(gallery => gallery.GalleryCountry.toLowerCase() === country.toLowerCase());
     if (galleriesByCountry.length === 0)
@@ -73,9 +73,25 @@ app.get('/gallery/:country', (req, res) => {
 
 // Returns JSON for all paintings
 // TESTED: YES
-app.get('/painting', (req, res) => {
+app.get('/paintings', (req, res) => {
     res.send(paintings);
     console.log("paintings.json file returned");
+});
+
+
+app.get('/painting/:id', (req, res) => {
+    const temp = req.params.id;
+    const id = parseInt(temp);
+    const painting = paintings.filter(painting => painting.paintingID === id);
+    if (painting.length === 0)
+    {
+        res.status(404).json("No painting found with that id");
+    }
+    else
+    {
+        res.send(painting);
+    }
+    console.log("paintings id file returned");
 });
 
 
@@ -181,4 +197,5 @@ app.get('/painting/color/:name', (req, res) => {
 });
 
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+//app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(process.env.PORT || 4000, ()=>console.log("server on " + process.env.port))
